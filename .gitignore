@@ -7,6 +7,10 @@ __pycache__/
 *.csv
 *.log
 
+
+Colab_files/
+currency exchange rate dataset Project.ipynb - Colab_files/
+
 # C extensions
 *.so
 
