@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Conversion Rates</title>
+</head>
+<body>
+    <h1>Currency Conversion: USD to EUR</h1>
+    <p>Biggest Change (7-Day): 
+        Base Currency: {{ biggest_change[0] }} <br>
+        Target Currency: {{ biggest_change[1] }} <br>
+        Max Rate: {{ biggest_change[2] }} <br>
+        Min Rate: {{ biggest_change[3] }} <br>
+        Percentage Change: {{ biggest_change[4] }} %
+    </p>
+    <h2>7-Day Rolling Chart of Conversion Rates</h2>
+    <img src="data:image/png;base64,{{ chart_url }}" alt="Rolling 7-Day Conversion Rates">
+</body>
+</html>
