@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS conversion_rates (
 );
 
 -- Optional indexes for performance
--- CREATE INDEX idx_base_target_date ON conversion_rates (base_currency, target_currency, date);
+CREATE INDEX idx_base_target_date ON conversion_rates (base_currency, target_currency, date);
 
 
 

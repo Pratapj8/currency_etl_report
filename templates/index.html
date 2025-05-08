@@ -1,20 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currency Conversion Rates</title>
+    <title>Currency Conversion Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            padding: 40px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        form {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 70%;
+            margin: 20px auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        label {
+            width: 100%;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        select, input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .chart-container, .info-box {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 25px;
+            width: 80%;
+            margin: 30px auto;
+            text-align: center;
+        }
+        img {
+            width: 100%;
+            max-width: 700px;
+        }
+        .info-box p {
+            margin: 10px 0;
+        }
+        .form-group {
+            flex: 1 1 30%;
+            margin-right: 20px;
+            min-width: 200px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Currency Conversion: USD to EUR</h1>
-    <p>Biggest Change (7-Day): 
-        Base Currency: {{ biggest_change[0] }} <br>
-        Target Currency: {{ biggest_change[1] }} <br>
-        Max Rate: {{ biggest_change[2] }} <br>
-        Min Rate: {{ biggest_change[3] }} <br>
-        Percentage Change: {{ biggest_change[4] }} %
-    </p>
-    <h2>7-Day Rolling Chart of Conversion Rates</h2>
-    <img src="data:image/png;base64,{{ chart_url }}" alt="Rolling 7-Day Conversion Rates">
+
+    <h1>📈 7-Day Currency Conversion Report</h1>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="base_currency">Base Currency:</label>
+            <select name="base_currency" id="base_currency">
+                {% for currency in ['USD', 'EUR', 'INR'] %}
+                    <option value="{{ currency }}" {% if currency == selected_base %}selected{% endif %}>{{ currency }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="target_currency">Target Currency:</label>
+            <select name="target_currency">
+                {% for currency in ['USD', 'EUR', 'INR'] %}
+                    <option value="{{ currency }}" {% if currency == selected_target %}selected{% endif %}>{{ currency }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="report_date">Report Date:</label>
+            <input type="date" name="report_date" value="{{ selected_date }}">
+        </div>
+
+        <div class="form-group" style="flex: 1 1 100%; text-align: center;">
+            <button type="submit">Generate Report</button>
+        </div>
+    </form>
+
+    <div class="chart-container">
+        {% if chart_url %}
+            <img src="data:image/png;base64,{{ chart_url }}" alt="Conversion Rate Chart">
+        {% elif data_empty %}
+            <p><em>No data available for the selected currency pair and date range.</em></p>
+        {% endif %}
+    </div>
+
+    <div class="info-box">
+        <h3>📊 Biggest Change Summary</h3>
+        {% if biggest_change %}
+            <p><strong>Base Currency:</strong> {{ biggest_change[0] }}</p>
+            <p><strong>Target Currency:</strong> {{ biggest_change[1] }}</p>
+            <p><strong>Max Rate:</strong> {{ biggest_change[2] }}</p>
+            <p><strong>Min Rate:</strong> {{ biggest_change[3] }}</p>
+            <p><strong>Change (%):</strong> {{ biggest_change[4] | round(2) }}%</p>
+        {% else %}
+            <p>No change data available.</p>
+        {% endif %}
+    </div>
+
+    <!-- Download Chart Button -->
+    <form method="POST" action="/download-chart" target="_blank" style="text-align: center; margin-top: 10px;">
+        <input type="hidden" name="base_currency" value="{{ selected_base }}">
+        <input type="hidden" name="target_currency" value="{{ selected_target }}">
+        <input type="hidden" name="report_date" value="{{ selected_date }}">
+        <button type="submit" style="background-color: #2ecc71;">Download Chart as PNG</button>
+    </form>
+
 </body>
 </html>

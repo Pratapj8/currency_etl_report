@@ -1,0 +1,23 @@
+
+---
+
+### ✅ Your `index.html` Review
+
+Your `index.html` code looks **great**! Here's a quick review:
+
+- **Form Inputs**: 
+   - The form correctly includes input for selecting base currency, target currency, and report date.
+   - You have a **POST method** for submitting the form, and the form is well laid out.
+   
+- **Chart Rendering**: 
+   - The chart generated in `app.py` is displayed correctly in the HTML by using a `<img>` tag with the `base64`-encoded image data.
+   
+- **Biggest Change Section**:
+   - This section is well-structured and will display information dynamically if there's any change data available.
+   - If there's no data, a fallback message `"No change data available"` is shown.
+
+The only minor improvement I'd suggest is to add some **error handling** in case the data does not exist for certain currency pairs or the date range — but it's not critical right now.
+
+---
+
+If everything looks good, you should be able to start the project and run it locally. Let me know if you need help with anything else!

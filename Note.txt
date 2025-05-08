@@ -1,9 +1,13 @@
-# Run and check the log error
+# Run and check the log error & is json data has been stored in sql or not
 
 python3 etl/etl_script.py
+
 
 # for flask 
 pip install flask mysql-connector-python matplotlib
 
 # Run app
 python app.py
+
+
+

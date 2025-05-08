@@ -1,4 +1,4 @@
-# ETL Script to fetch currency conversion rates and insert them into a MySQL database
+# ETL (Extract, Transform, and Load) Script to fetch currency conversion rates and insert them into a MySQL database
 import requests
 import json
 import mysql.connector
@@ -53,8 +53,7 @@ def fetch_and_insert_conversion_rates():
                 if base_currency != target_currency:
                     rate = rate_info.get('rate')
                     inverse_rate = rate_info.get('inverseRate', None)
-                    # Use UTC date
-                    date = datetime.now(timezone.utc).date()
+                    date = datetime.now(timezone.utc).date() # Use UTC date
 
                     # Insert base -> target currency with ON DUPLICATE KEY UPDATE to avoid duplicates
                     insert_query = """
@@ -62,8 +61,12 @@ def fetch_and_insert_conversion_rates():
                         VALUES (%s, %s, %s, %s)
                         ON DUPLICATE KEY UPDATE rate = VALUES(rate)
                     """
-                    cursor.execute(insert_query, (base_currency, target_currency, rate, date))
-                    logging.info(f"Inserted {base_currency} to {target_currency} rate of {rate} on {date}.")
+                    try:
+                        cursor.execute(insert_query, (base_currency, target_currency, rate, date))
+                        logging.info(f"Inserted {base_currency} to {target_currency} rate of {rate} on {date}.")
+                    except mysql.connector.Error as e:
+                        logging.error(f"Failed to insert data for {base_currency} to {target_currency} on {date}: {e}")
+                        continue  # Proceed with the next currency pair if there's an error
 
                     # Insert target -> base currency (reverse rate) with ON DUPLICATE KEY UPDATE
                     if inverse_rate:
@@ -72,8 +75,12 @@ def fetch_and_insert_conversion_rates():
                             VALUES (%s, %s, %s, %s)
                             ON DUPLICATE KEY UPDATE rate = VALUES(rate)
                         """
-                        cursor.execute(insert_query_inverse, (target_currency, base_currency, inverse_rate, date))
-                        logging.info(f"Inserted {target_currency} to {base_currency} rate of {inverse_rate} on {date}.")
+                        try:
+                            cursor.execute(insert_query_inverse, (target_currency, base_currency, inverse_rate, date))
+                            logging.info(f"Inserted {target_currency} to {base_currency} rate of {inverse_rate} on {date}.")
+                        except mysql.connector.Error as e:
+                            logging.error(f"Failed to insert data for {target_currency} to {base_currency} on {date}: {e}")
+                            continue  # Proceed with the next currency pair if there's an error
 
         # Commit changes
         connection.commit()
@@ -83,6 +90,8 @@ def fetch_and_insert_conversion_rates():
         logging.error(f"Database connection failed: {err}")
     except RequestException as err:
         logging.error(f"Request failed: {err}")
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {e}")
     finally:
         # Close the database connection
         if connection:
