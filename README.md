@@ -46,13 +46,16 @@ Clone this repository to your local machine:
 
 ```bash
 Run -
+
 git clone https://github.com/your-username/currency-conversion-report.git
 cd currency-conversion-report
+---
 
 ### 2. Create and Activate a Virtual Environment
 
 python -m venv venv
 source venv/bin/activate         # On Windows: venv\Scripts\activate
+---
 
 ### 3. Install Python Dependencies
 
@@ -89,7 +92,7 @@ Log file will be created at logs/etl.log.
 python app.py
 Visit: http://localhost:5000
 
-
+---
 🖥️ Using the Web App
 On the homepage, you'll see:
 
