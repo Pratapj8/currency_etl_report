@@ -46,30 +46,17 @@ At Bottom Page : A summary box showing the biggest % change in rates
 
 # 📁 Project Structure
 
-currency-conversion-report/
-│
-├── app.py                # Flask app to serve reports
-├── create_tables.sql     # SQL to create schema
-├── requirements.txt      # Python package list
-├── currency_etl_report/
-│      └── sql/
-|          └── create_table.sql # Create sql query
-├── logs/
-│   └── etl.log           # Log file for ETL job
-├── etl/
-│   └── etl_script.py     # Fetch and load daily currency data
-├── templates/
-│   └── index.html        # Flask HTML template
+![App Screenshot](Project_structure.png)
 
 
 
 # 📌 Notes
 - The ETL script runs manually for now — to automate, schedule it with cron (Linux/Mac) or Task Scheduler (Windows).
-- The app uses UTC date/time for consistency.
+- The app uses Coordinated Universal Time (UTC) date/time for consistency.
 - Avoid reloading the same rates due to the UNIQUE constraint on (base_currency, target_currency, date).
 
-# ✅ Quick Copy Commands
-## Clone, install, and run everything:
+# ✅ Quick Copy Paste Commands
+## Clone, install and run everything:
 
 - git clone https://github.com/your-username/currency-conversion-report.git
 - cd currency-conversion-report
@@ -84,29 +71,25 @@ currency-conversion-report/
 
 ---
 
-## 🛠️ Setup Instructions
+## 🛠️ Setup Instructions in details :
 
-# Run  
-
-Clone this repository to your local machine:
+# Clone this repository to your local machine:
 
 ```bash
 # 1. Clone the Repository
 
 - git clone https://github.com/your-username/currency-conversion-report.git
 - cd currency-conversion-report
----
 
 # 2. Create and Activate a Virtual Environment
 
 - python -m venv venv
 - source venv/bin/activate         # On Windows: venv\Scripts\activate
----
 
 # 3. Install Python Dependencies
 
 - pip install -r requirements.txt
-- If you don't have requirements.txt, create one with:
+# If you don't have requirements.txt, create one with:
 - pip install flask mysql-connector-python matplotlib requests
 - pip freeze > requirements.txt
 
@@ -114,28 +97,27 @@ Clone this repository to your local machine:
 
 ## Log into MySQL and run the schema file:
 
+# This creates the database currency_rates and the conversion_rates table.
 - mysql -u root -p < create_tables.sql
 
-# This creates the database currency_rates and the conversion_rates table.
 
 # 5. Configure Database Credentials
 
-- In both etl_script.py and app.py, update the database configuration:
+# In both etl_script.py and app.py, update the database configuration:
 
 db_config = {
     'host': 'localhost',
-    'user': 'root',
+    'user': 'root',          # ← Replace with your actual MySQL user
     'password': '',          # ← Replace with your actual MySQL password
     'database': 'currency_rates'
 }
 
 # 6. Run the ETL Job
 
-This script fetches daily exchange rates and loads them into the database. Run it manually (or later via a cron job):
+# This script fetches daily exchange rates and loads them into the database. Run it manually (or later via a cron job):
 
 - python etl_script.py
-
-Log file will be created at logs/etl.log.
+# Log file will be created at logs/etl.log.
 
 # 7. Start the Web App
 
