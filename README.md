@@ -34,19 +34,16 @@ To get started, make sure you have the following installed:
 - **MySQL Connector for Python**
 
 # 🖥️ Using the Web App
-On the homepage, you'll see:
+On the homepage, you'll see a form to select:
 
-A form to select:
-
-Base Currency (USD, EUR, INR)↔ Target Currency↔ Report Date (defaults to today)
-
-In Middle Page : A line chart of conversion rates for the last 7 days
-At Bottom Page : A summary box showing the biggest % change in rates
+- Base Currency (USD, EUR, INR)↔ Target Currency↔ Report Date (defaults to today)
+- In Middle Page : A line chart of conversion rates for the last 7 days.
+- At Bottom Page : A summary box showing the biggest % change in rates.
 
 
 # 📁 Project Structure
 
-![App Screenshot](Project_structure.png)
+![Project Structure Screenshot](assets/Project_structure.png)
 
 
 
@@ -71,12 +68,10 @@ At Bottom Page : A summary box showing the biggest % change in rates
 
 ---
 
-## 🛠️ Setup Instructions in details :
-
-# Clone this repository to your local machine:
+# 🛠️ Setup Instructions in details :
 
 ```bash
-# 1. Clone the Repository
+# 1.  Clone this repository to your local machine:
 
 - git clone https://github.com/your-username/currency-conversion-report.git
 - cd currency-conversion-report
