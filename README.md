@@ -25,10 +25,16 @@ This project is a web application that provides a 7-day currency conversion repo
 To get started, make sure you have the following installed:
 
 - **Python 3.x** (Make sure `pip` is also installed with Python)
-- **MySQL** (or MariaDB)
+- **MySQL** 
 - **Flask**
+- **Logging**
+- **Requests**
 - **Matplotlib**
+- **Jinja2 Templates**
 - **MySQL Connector for Python**
+
+## 📦 Tech Stack
+
 
 ---
 
@@ -39,76 +45,30 @@ To get started, make sure you have the following installed:
 Clone this repository to your local machine:
 
 ```bash
+Run -
 git clone https://github.com/your-username/currency-conversion-report.git
 cd currency-conversion-report
 
-# 💱 Currency Conversion Reporting App
-
-This project is a full-stack Python application that performs ETL on foreign exchange rates, stores them in a MySQL database, and provides a web-based interface for generating a rolling 7-day currency conversion report.
-
----
-
-## 🚀 Features
-
-- ✅ Daily ETL job fetching live exchange rates from [FloatRates](https://www.floatrates.com/json-feeds.html)
-- ✅ Converts and stores exchange rates in a MySQL database
-- ✅ Prevents duplicate entries using SQL constraints
-- ✅ Flask-based web app to visualize 7-day rolling currency rate trends
-- ✅ Select base/target currency and reporting date dynamically
-- ✅ Displays biggest percentage rate change in the 7-day window
-- ✅ Clean logging and retry mechanism for reliability
-
----
-
-## 📦 Tech Stack
-
-- **Python 3**
-- **Flask**
-- **MySQL**
-- **Matplotlib**
-- **Requests**
-- **Jinja2 Templates**
-- **Logging**
-
----
-
-## ⚙️ Prerequisites
-
-Make sure you have the following installed:
-
-- Python 3.x and `pip`
-- MySQL Server (or MariaDB)
-- Git
-
----
-
-## 🛠️ Setup Instructions
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/your-username/currency-conversion-report.git
-cd currency-conversion-report
-
-2. Create and Activate a Virtual Environment
+### 2. Create and Activate a Virtual Environment
 
 python -m venv venv
 source venv/bin/activate         # On Windows: venv\Scripts\activate
 
-3. Install Python Dependencies
+### 3. Install Python Dependencies
 
 pip install -r requirements.txt
 If you don't have requirements.txt, create one with:
 pip install flask mysql-connector-python matplotlib requests
 pip freeze > requirements.txt
 
-4. Set Up the MySQL Database
+### 4. Set Up the MySQL Database
+
 Log into MySQL and run the schema file:
 
 mysql -u root -p < create_tables.sql
 This creates the database currency_rates and the conversion_rates table.
 
-5. Configure Database Credentials
+### 5. Configure Database Credentials
 In both etl_script.py and app.py, update the database configuration:
 
 db_config = {
@@ -118,13 +78,13 @@ db_config = {
     'database': 'currency_rates'
 }
 
-6. Run the ETL Job
+### 6. Run the ETL Job
 This script fetches daily exchange rates and loads them into the database. Run it manually (or later via a cron job):
 python etl_script.py
 
 Log file will be created at logs/etl.log.
 
-7. Start the Web App
+### 7. Start the Web App
 
 python app.py
 Visit: http://localhost:5000
