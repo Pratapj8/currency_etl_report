@@ -1,4 +1,11 @@
-# Currency Conversion Report
+# 💱 Currency Conversion Report
+## 🖼️ Screenshot
+Here is what the app interface looks like:
+
+![App Screenshot](assets/App_screenshot.png)
+
+
+# 💱 Currency Conversion Report
 
 This project is a web application that provides a 7-day currency conversion report. The app fetches daily exchange rates from the FloatRates API, stores them in a MySQL database, and allows the user to generate a report with a chart and the biggest currency rate change.
 
