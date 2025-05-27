@@ -55,10 +55,10 @@ On the homepage, you'll see a form to select:
 # ✅ Quick Copy Paste Commands
 ## Clone, install and run everything:
 
-- git clone https://github.com/your-username/currency-conversion-report.git
-- cd currency-conversion-report
+- git clone https://github.com/Pratapj8/currency_etl_report.git 
+- # skip if not reqiured cd currency_etl_report
 - python -m venv venv
-- source venv/bin/activate
+- .\venv\Scripts\activate # windows
 - pip install -r requirements.txt
 - mysql -u root -p < create_tables.sql
 - python etl_script.py
