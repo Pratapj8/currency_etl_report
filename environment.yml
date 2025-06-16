@@ -6,7 +6,4 @@ dependencies:
   - pandas
   - numpy
   - requests
-  - flask 
-  - mysql-connector-python 
-  - matplotlib
-  # add other dependencies as needed
+  # Add other dependencies as needed
