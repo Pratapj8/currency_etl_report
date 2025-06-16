@@ -1,8 +1,12 @@
-name: myenv
+name: currency-etl-env
 channels:
   - defaults
 dependencies:
   - python=3.10
   - pandas
   - numpy
-  # ...other dependencies...
+  - requests
+  - flask 
+  - mysql-connector-python 
+  - matplotlib
+  # add other dependencies as needed
