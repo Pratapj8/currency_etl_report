@@ -1,10 +1,25 @@
+# Import Flask to create the web app
 from flask import Flask, render_template, request, send_file
+
+# MySQL connector to connect and interact with the MySQL database
 import mysql.connector
+
+# matplotlib to create graphs or plots
 import matplotlib.pyplot as plt
+
+# BytesIO lets us handle file-like data in memory (useful for images/plots)
 from io import BytesIO
+
+# base64 is used to convert binary data (like images) into text for display in HTML
 import base64
+
+# This makes sure matplotlib works even without a GUI (e.g., on a server)
 import matplotlib
+
+# Import datetime to work with dates and times
 from datetime import datetime
+
+# Import logging to create log messages for debugging or tracking
 import logging
 
 # Use the 'Agg' backend for non-interactive plotting
@@ -13,7 +28,7 @@ matplotlib.use('Agg')
 # Initialize Flask app
 app = Flask(__name__, template_folder='templates')
 
-# MySQL connection details
+# MySQL database connection details
 db_config = {
     'host': 'localhost',
     'user': 'root',  # Replace with your MySQL username
