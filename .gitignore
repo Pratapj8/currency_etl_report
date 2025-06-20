@@ -11,6 +11,7 @@ __pycache__/
 #AWS_EC2
 EC2_AWS/
 
+# Colab files
 
 Colab_files/
 currency exchange rate dataset Project.ipynb - Colab_files/
