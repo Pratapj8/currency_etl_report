@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, send_file
 
 # MySQL connector to connect and interact with the MySQL database
 import mysql.connector
+from mysql.connector import pooling
 
 # matplotlib to create graphs or plots
 import matplotlib.pyplot as plt
@@ -39,6 +40,13 @@ db_config = {
 # Setup logging
 logging.basicConfig(filename='logs/app.log', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 
+# Setup MySQL connection pool
+connection_pool = pooling.MySQLConnectionPool(pool_name="mypool",
+                                            pool_size=5,
+                                              **db_config)
+import os
+os.makedirs('logs', exist_ok=True)
+
 # Fetch the last 7 days of conversion rates
 def fetch_rolling_7_day_data(base_currency, target_currency, report_date):
     try:
@@ -72,9 +80,19 @@ def generate_chart(data):
         plt.ylabel("Conversion Rate")
 
         # Rotate and format date labels on x-axis
+        # Ensure all dates are datetime.date objects
+        formatted_dates = []
+        for date in dates:
+            if isinstance(date, str):
+                try:
+                    formatted_dates.append(datetime.strptime(date, "%Y-%m-%d").date())
+                except ValueError:
+                    formatted_dates.append(date)
+            else:
+                formatted_dates.append(date)
         plt.xticks(
-            dates, 
-            [date.strftime('%Y-%m-%d') for date in dates],  # Format the date as YYYY-MM-DD
+            formatted_dates, 
+            [d.strftime('%Y-%m-%d') if hasattr(d, 'strftime') else str(d) for d in formatted_dates],  # Format the date as YYYY-MM-DD
             rotation=45,  # Rotate by 45 degrees
             ha='right'  # Align the labels to the right for better readability
         )
@@ -112,38 +130,12 @@ def index():
     else:
         chart_url = None
         img = None
-        logging.warning(f"No data available for {base_currency} -> {target_currency} on {report_date}")
-
-    # Biggest change in 7-day window
-    try:
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT 
-                base_currency,
-                target_currency,
-                MAX(rate) AS max_rate,
-                MIN(rate) AS min_rate,
-                (MAX(rate) - MIN(rate)) / MIN(rate) * 100 AS percentage_change
-            FROM 
-                conversion_rates
-            WHERE 
-                base_currency = %s AND target_currency = %s
-                AND date BETWEEN %s - INTERVAL 6 DAY AND %s
-            GROUP BY 
-                base_currency, target_currency
-        """, (base_currency, target_currency, report_date, report_date))
-        biggest_change = cursor.fetchone()
-        cursor.close()
-        conn.close()
-    except mysql.connector.Error as e:
-        logging.error(f"Database query error while fetching biggest change for {base_currency} -> {target_currency}: {e}")
         biggest_change = None
 
     return render_template(
         'index.html',
         chart_url=chart_url,
-        biggest_change=biggest_change,
+        biggest_change=biggest_change if data else None,
         selected_base=base_currency,
         selected_target=target_currency,
         selected_date=report_date.strftime('%Y-%m-%d')
@@ -178,4 +170,6 @@ def download_chart():
     return send_file(img, mimetype='image/png', as_attachment=True, download_name='currency_chart.png')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import os
+    debug_mode = os.environ.get('FLASK_DEBUG', '0') == '1'
+    app.run(debug=debug_mode)
