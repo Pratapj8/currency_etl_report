@@ -1,9 +1,9 @@
-name: Test ML Model
+name: Run ETL Script
 
 on: [push]
 
 jobs:
-  build:
+  etl-job:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
         activate-environment: my_ml_env
         auto-activate-base: false
 
-    - name: Run tests
+    - name: Run ETL script
       run: |
         conda info --envs
-        python your_test_script.py
+        python etl/etl_script.py
