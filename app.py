@@ -6,7 +6,7 @@ import mysql.connector
 from mysql.connector import pooling
 
 # matplotlib to create graphs or plots
-import matplotlib.pyplot as plt
+import matplotlib
 
 # BytesIO lets us handle file-like data in memory (useful for images/plots)
 from io import BytesIO
@@ -15,16 +15,14 @@ from io import BytesIO
 import base64
 
 # This makes sure matplotlib works even without a GUI (e.g., on a server)
-import matplotlib
+matplotlib.use('Agg')  # Set backend before importing pyplot
+import matplotlib.pyplot as plt
 
 # Import datetime to work with dates and times
 from datetime import datetime
 
 # Import logging to create log messages for debugging or tracking
 import logging
-
-# Use the 'Agg' backend for non-interactive plotting
-matplotlib.use('Agg')  
 
 # Initialize Flask app
 app = Flask(__name__, template_folder='templates')
@@ -37,15 +35,12 @@ db_config = {
     'database': 'currency_rates'  # Replace with your database name
 }
 
-# Setup logging
-logging.basicConfig(filename='logs/app.log', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
-
-# Setup MySQL connection pool
-connection_pool = pooling.MySQLConnectionPool(pool_name="mypool",
-                                            pool_size=5,
-                                              **db_config)
+# Ensure logs directory exists before setting up logging
 import os
 os.makedirs('logs', exist_ok=True)
+
+# Setup logging
+logging.basicConfig(filename='logs/app.log', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 
 # Fetch the last 7 days of conversion rates
 def fetch_rolling_7_day_data(base_currency, target_currency, report_date):
@@ -114,19 +109,30 @@ def index():
     base_currency = 'USD'
     target_currency = 'EUR'
     report_date = datetime.today().date()
+    biggest_change = None  # Ensure variable is always defined
 
     if request.method == 'POST':
         base_currency = request.form.get('base_currency')
         target_currency = request.form.get('target_currency')
         report_date = request.form.get('report_date')
         if report_date:
-            report_date = datetime.strptime(report_date, "%Y-%m-%d").date()
+            try:
+                report_date = datetime.strptime(report_date, "%Y-%m-%d").date()
+            except ValueError:
+                report_date = datetime.today().date()
 
     # Fetch rolling 7-day data
     data = fetch_rolling_7_day_data(base_currency, target_currency, report_date)
 
     if data:
         chart_url, img = generate_chart(data)
+        # Calculate biggest change (max-min) if data is available
+        try:
+            rates = [item[1] for item in data]
+            if rates:
+                biggest_change = max(rates) - min(rates)
+        except Exception as e:
+            logging.error(f"Error calculating biggest change: {e}")
     else:
         chart_url = None
         img = None
@@ -135,7 +141,7 @@ def index():
     return render_template(
         'index.html',
         chart_url=chart_url,
-        biggest_change=biggest_change if data else None,
+        biggest_change=biggest_change,
         selected_base=base_currency,
         selected_target=target_currency,
         selected_date=report_date.strftime('%Y-%m-%d')

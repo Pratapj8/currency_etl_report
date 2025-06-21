@@ -8,6 +8,10 @@ from datetime import datetime
 import time
 from requests.exceptions import RequestException
 from datetime import datetime, timezone
+import os
+
+# Ensure logs directory exists before setting up logging
+os.makedirs('logs', exist_ok=True)
 
 # Setup logging
 logging.basicConfig(filename='logs/etl.log', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
@@ -24,6 +28,8 @@ db_config = {
 base_currencies = ['USD', 'EUR', 'INR']
 
 def fetch_and_insert_conversion_rates():
+    connection = None  # Ensure connection is defined for finally block
+    cursor = None
     try:
         # Connect to the database
         connection = mysql.connector.connect(**db_config)
@@ -95,8 +101,9 @@ def fetch_and_insert_conversion_rates():
         logging.error(f"An unexpected error occurred: {e}")
     finally:
         # Close the database connection
-        if connection:
+        if cursor:
             cursor.close()
+        if connection:
             connection.close()
 
 # Main function to run the ETL job
