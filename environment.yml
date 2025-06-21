@@ -1,9 +1,0 @@
-name: currency-etl-env
-channels:
-  - defaults
-dependencies:
-  - python=3.10
-  - pandas
-  - numpy
-  - requests
-  # Add other dependencies as needed

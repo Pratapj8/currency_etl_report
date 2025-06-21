@@ -1,4 +1,5 @@
 # ETL (Extract, Transform, and Load) Script to fetch currency conversion rates and insert them into a MySQL database
+
 import requests
 import json
 import mysql.connector
@@ -14,9 +15,9 @@ logging.basicConfig(filename='logs/etl.log', level=logging.INFO, format='%(ascti
 # MySQL connection details
 db_config = {
     'host': 'localhost',
-    'user': 'root',  # Replace with your MySQL username
-    'password': '',  # Replace with your MySQL password
-    'database': 'currency_rates'  # Replace with your database name
+    'user': 'root',  # Replace with MySQL username
+    'password': '',  # Replace with MySQL password
+    'database': 'currency_rates'  # Replace with database name
 }
 
 # List of base currencies to fetch data for
@@ -33,12 +34,12 @@ def fetch_and_insert_conversion_rates():
             url = f'https://www.floatrates.com/daily/{base_currency.lower()}.json'
 
             # Fetch the exchange rate data with retry mechanism
-            retries = 3
+            retries = 3 # try 3 times
             for attempt in range(retries):
                 try:
-                    response = requests.get(url)
+                    response = requests.get(url) # get (fetch) data from url
                     response.raise_for_status()  # Raise an exception for bad status codes
-                    data = response.json()
+                    data = response.json() # data is in json format
                     break  # Break out of the retry loop if the request is successful
                 except RequestException as e:
                     logging.error(f"Request failed for {base_currency} on attempt {attempt + 1}: {e}")

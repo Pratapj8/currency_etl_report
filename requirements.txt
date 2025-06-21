@@ -4,4 +4,4 @@ matplotlib3
 requests
 Jinja2
 numpy
-
+mysql-connector-python
