@@ -1,0 +1,11 @@
+name: test
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - pandas
+  - numpy
+  - requests
+  - pip
+  - pip:
+      - some-pypi-only-package
