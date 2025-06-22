@@ -1,6 +1,6 @@
 flask 
 mysql-connector-python 
-matplotlib3
+matplotlib
 requests
 Jinja2
 numpy

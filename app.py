@@ -178,4 +178,7 @@ def download_chart():
 if __name__ == '__main__':
     import os
     debug_mode = os.environ.get('FLASK_DEBUG', '0') == '1'
-    app.run(debug=debug_mode)
+    #app.run(debug=debug_mode, host='127.0.0.1', port=5050)
+    app.run(debug=debug_mode, host='127.0.0.1', port=8888)
+
+

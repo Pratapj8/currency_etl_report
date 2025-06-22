@@ -113,17 +113,26 @@
     </div>
 
     <div class="info-box">
-        <h3>📊 Biggest Change Summary</h3>
-        {% if biggest_change %}
-            <p><strong>Base Currency:</strong> {{ biggest_change[0] }}</p>
-            <p><strong>Target Currency:</strong> {{ biggest_change[1] }}</p>
-            <p><strong>Max Rate:</strong> {{ biggest_change[2] }}</p>
-            <p><strong>Min Rate:</strong> {{ biggest_change[3] }}</p>
-            <p><strong>Change (%):</strong> {{ biggest_change[4] | round(2) }}%</p>
+    <h3>📊 Biggest Change Summary</h3>
+    {% if biggest_change is defined %}
+        {% if biggest_change is sequence %}
+            {% if biggest_change|length > 4 and biggest_change[4] is not none %}
+                <p><strong>Base Currency:</strong> {{ biggest_change[0] }}</p>
+                <p><strong>Target Currency:</strong> {{ biggest_change[1] }}</p>
+                <p><strong>Max Rate:</strong> {{ biggest_change[2] }}</p>
+                <p><strong>Min Rate:</strong> {{ biggest_change[3] }}</p>
+                <p><strong>Change (%):</strong> {{ biggest_change[4] | round(2) }}%</p>
+            {% else %}
+                <p>No change data available.</p>
+            {% endif %}
         {% else %}
             <p>No change data available.</p>
         {% endif %}
-    </div>
+    {% else %}
+        <p>No change data available.</p>
+    {% endif %}
+</div>
+
 
     <!-- Download Chart Button -->
     <form method="POST" action="/download-chart" target="_blank" style="text-align: center; margin-top: 10px;">
